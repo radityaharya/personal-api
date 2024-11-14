@@ -8,7 +8,6 @@ import {
   RecordShiyuDefenseSchema
 } from '../schemas/zzz.schema'
 import { createResponse } from '../utils/createResponse'
-import "zod-openapi/extend";
 
 export const zzzRouter = new Hono()
 
