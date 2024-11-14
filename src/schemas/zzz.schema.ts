@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 const commemorativeCoinSchema = z.object({
   num: z.number(),
@@ -59,7 +59,6 @@ const RecordsResponseSchema = z.object({
 });
 
 type IRecordsResponse = z.infer<typeof RecordsResponseSchema>;
-
 
 const EnergyProgressSchema = z.object({
   max: z.number(),
@@ -237,15 +236,16 @@ const dateTimeSchema = z.object({
   second: z.number(),
 });
 
-
 const RecordShiyuDefenseSchema = z.object({
   schedule_id: z.number(),
   begin_time: z.string(),
   end_time: z.string(),
-  rating_list: z.array(z.object({
-    times: z.number(),
-    rating: z.string(),
-  })),
+  rating_list: z.array(
+    z.object({
+      times: z.number(),
+      rating: z.string(),
+    }),
+  ),
   has_data: z.boolean(),
   all_floor_detail: z.array(floorDetailSchema),
   fast_layer_time: z.number(),
@@ -255,5 +255,13 @@ const RecordShiyuDefenseSchema = z.object({
 });
 type RecordShiyuDefense = z.infer<typeof RecordShiyuDefenseSchema>;
 
-
-export { RecordsResponseSchema, IRecordsResponse, RecordNoteResponseSchema, IRecordNoteResponse, RecordHollowZeroResponseSchema, IRecordHollowZeroResponse, RecordShiyuDefenseSchema, RecordShiyuDefense };
+export {
+  RecordsResponseSchema,
+  IRecordsResponse,
+  RecordNoteResponseSchema,
+  IRecordNoteResponse,
+  RecordHollowZeroResponseSchema,
+  IRecordHollowZeroResponse,
+  RecordShiyuDefenseSchema,
+  RecordShiyuDefense,
+};
