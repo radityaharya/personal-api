@@ -6,6 +6,13 @@ interface CacheEntry<T> {
   timestamp: number
 }
 
+const colors = {
+  hit: '\x1b[32m',    // Green
+  miss: '\x1b[33m',   // Yellow
+  error: '\x1b[31m',  // Red
+  reset: '\x1b[0m'    // Reset
+}
+
 const cacheStore = new Map<string, CacheEntry<JSONValue>>()
 
 const formatDuration = (ms: number): string => {
@@ -24,11 +31,9 @@ export const cache = <T extends JSONValue>(durationMs: number) => {
       if (age < durationMs) {
         c.header('Age', Math.floor(age / 1000).toString())
         c.header('X-Cache', 'HIT')
-        console.log(`[Cache] Hit: ${key} (age: ${formatDuration(age)} / ttl: ${formatDuration(durationMs)})`)
+        console.log(`${colors.hit}[Cache] Hit: ${key} (age: ${formatDuration(age)} / ttl: ${formatDuration(durationMs)})${colors.reset}`)
         return c.json(cached.data)
       }
-      c.header('X-Cache', 'STALE')
-      console.log(`[Cache] Stale: ${key} (age: ${formatDuration(age)} / ttl: ${formatDuration(durationMs)})`)
     }
 
     await next()
@@ -38,15 +43,17 @@ export const cache = <T extends JSONValue>(durationMs: number) => {
         const clonedResponse = c.res.clone()
         const data = await clonedResponse.json() as T
         
+        const wasStale = cached ? `(stale age: ${formatDuration(Date.now() - cached.timestamp)})` : ''
+        console.log(`${colors.miss}[Cache] Miss: ${key} ${wasStale}${colors.reset}`)
+        
         cacheStore.set(key, { 
           data,
           timestamp: Date.now() 
         })
         c.header('X-Cache', 'MISS')
-        console.log(`[Cache] Miss: ${key}`)
       }
     } catch (error) {
-      console.warn(`[Cache] Failed to cache response for ${key}:`, error)
+      console.warn(`${colors.error}[Cache] Failed to cache response for ${key}:${colors.reset}`, error)
       c.header('X-Cache', 'ERROR')
     }
   }

@@ -12,13 +12,16 @@ const app = new Hono<{
   };
 }>()
 
-// const token = process.env.APP_TOKEN as string
-
-
 app.use("/*", customLogger)
 
 
-app.use('/*', cache(process.env.CACHE_DURATION ? parseInt(process.env.CACHE_DURATION) : 60))
+const DEFAULT_CACHE_DURATION = 60;
+
+const cacheDuration: number = process.env.CACHE_DURATION 
+  ? parseInt(process.env.CACHE_DURATION) 
+  : DEFAULT_CACHE_DURATION;
+
+app.use('/*', cache(cacheDuration));
 
 app.get('/', (c) => {
   return c.json({
