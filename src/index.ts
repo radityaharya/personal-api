@@ -4,7 +4,8 @@ import { customLogger } from "./utils/logger";
 import { zzzRouter } from "./routes/zzz";
 import { networkRouter } from "./routes/network";
 import { byuRouter } from "./routes/byu";
-import { cache } from "./utils/cache";
+import { aiRouter } from "./routes/ai";
+// import { cache } from "./utils/cache";
 
 const app = new Hono<{
   Variables: {
@@ -14,14 +15,13 @@ const app = new Hono<{
 
 app.use("/*", customLogger);
 
-const DEFAULT_CACHE_DURATION = 60;
+// const DEFAULT_CACHE_DURATION = 60;
 
-const cacheDuration: number = process.env.CACHE_DURATION
-  ? parseInt(process.env.CACHE_DURATION)
-  : DEFAULT_CACHE_DURATION;
+// const cacheDuration: number = process.env.CACHE_DURATION
+//   ? parseInt(process.env.CACHE_DURATION)
+//   : DEFAULT_CACHE_DURATION;
 
-//  @ts-expect-error this is a valid use of the cache middleware
-app.use("/*", cache(cacheDuration));
+// app.use("/*", cache(cacheDuration));
 
 app.get("/", (c) => {
   return c.json({
@@ -34,6 +34,7 @@ app.get("/", (c) => {
 app.route("/api/zzz", zzzRouter);
 app.route("/api/network", networkRouter);
 app.route("/api/byu", byuRouter);
+app.route("/api/ai", aiRouter);
 export default {
   fetch: app.fetch,
   port: 3000,
