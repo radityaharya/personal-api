@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import { handleError } from "../utils/error";
-import * as ping from "ping";
 import { createResponse } from "../utils/createResponse";
 
 export const networkRouter = new Hono();

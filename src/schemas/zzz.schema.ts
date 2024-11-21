@@ -108,7 +108,7 @@ const RecordNoteResponseSchema = z.object({
   survey_points: SurveyPointsSchema,
   abyss_refresh: z.number(),
   coffee: z.nullable(z.object({}).passthrough()),
-  weekly_task: WeeklyTaskSchema,
+  weekly_task: z.nullable(WeeklyTaskSchema).optional(),
 });
 
 type IRecordNoteResponse = z.infer<typeof RecordNoteResponseSchema>;
