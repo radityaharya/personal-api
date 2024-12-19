@@ -140,10 +140,26 @@ const DeviceSchema = z.object({
     ),
 });
 
+
+const DeviceResponseSchema = DeviceSchema.omit({
+  postureIdentity: true,
+  nodeKey: true,
+  tailnetLockKey: true,
+  tailnetLockError: true,
+  nodeId: true,
+  id: true,
+  machineKey: true,
+}).extend({
+  online: z
+    .boolean()
+    .optional()
+    .describe("Whether the device is currently online"),
+});
+
 // ######
 
-const TailscaleDevicesSchema = z.object({
-  devices: z.array(DeviceSchema),
+const TailscaleDevicesResponseSchema = z.object({
+  devices: z.array(DeviceResponseSchema),
 });
 
 // ######
@@ -153,7 +169,9 @@ type DerpLatency = z.infer<typeof DerpLatencySchema>;
 type ClientConnectivity = z.infer<typeof ClientConnectivitySchema>;
 type PostureIdentity = z.infer<typeof PostureIdentitySchema>;
 type Device = z.infer<typeof DeviceSchema>;
-type TailscaleDevices = z.infer<typeof TailscaleDevicesSchema>;
+type TailscaleDevicesResponseSchema = z.infer<typeof TailscaleDevicesResponseSchema>;
+
+type DeviceResponse = z.infer<typeof DeviceResponseSchema>;
 
 export {
   ClientSupportsSchema,
@@ -161,12 +179,18 @@ export {
   ClientConnectivitySchema,
   PostureIdentitySchema,
   DeviceSchema,
-  TailscaleDevicesSchema,
+  TailscaleDevicesResponseSchema,
+
+  // response
+  DeviceResponseSchema,
+  
   // Types
   ClientSupports,
   DerpLatency,
   ClientConnectivity,
   PostureIdentity,
   Device,
-  TailscaleDevices,
+
+  // Response Types
+  DeviceResponse,
 };

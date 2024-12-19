@@ -20,6 +20,15 @@ const options: ZZZOptions = {
 
 const zzz = new ZZZClient(options);
 
+zzzRouter.get("/", (c) => {
+  return c.json({
+    routes: zzzRouter.routes.map((route) => ({
+      method: route.method,
+      path: route.path,
+    })),
+  });
+});
+
 zzzRouter.get("/note", async (c) => {
   try {
     const recordNote = await zzz.getNote();

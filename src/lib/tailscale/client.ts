@@ -3,8 +3,8 @@ import { TailscaleOptions } from "./types";
 import { TailscaleClientError } from "./error";
 import {
   Device,
-  TailscaleDevicesSchema,
-  TailscaleDevices,
+  DeviceResponseSchema,
+  DeviceResponse,
 } from "./tailscale.schema";
 import { z } from "zod";
 
@@ -49,13 +49,23 @@ export class TailscaleClient {
     );
   }
 
-  async getDevices(): Promise<Device[]> {
+  async getDevices(): Promise<DeviceResponse[]> {
     return await withErrorHandling(async () => {
       const response = await this.client.get(
         `/tailnet/${this.options.tailnet}/devices`,
       );
-      return TailscaleDevicesSchema.parse(response.data as TailscaleDevices)
-        .devices;
+
+      const devices = response.data.devices as Device[];
+      const now = Date.now();
+      const timeout = this.options.onlineTimeout ?? 60 * 1000; // 60 seconds
+
+      const devicesWithOnlineStatus = devices.map((device) => {
+        const lastSeenTime = new Date(device.lastSeen).getTime();
+        const online = now - lastSeenTime < timeout;
+        return { ...device, online };
+      });
+
+      return DeviceResponseSchema.array().parse(devicesWithOnlineStatus);
     }, "Failed to fetch devices");
   }
 }

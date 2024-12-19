@@ -74,6 +74,15 @@ function transformPlanData(data: ByuApiResponse) {
   };
 }
 
+byuRouter.get("/", (c) => {
+  return c.json({
+    routes: byuRouter.routes.map((route) => ({
+      method: route.method,
+      path: route.path,
+    })),
+  });
+});
+
 byuRouter.get("/plan", async (c) => {
   try {
     const data = await fetchByuPlan(process.env.BYU_API_TOKEN!);

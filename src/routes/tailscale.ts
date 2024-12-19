@@ -16,6 +16,15 @@ const options: TailscaleOptions = {
 
 const tailscale = new TailscaleClient(options);
 
+tailscaleRouter.get("/", (c) => {
+  return c.json({
+    routes: tailscaleRouter.routes.map((route) => ({
+      method: route.method,
+      path: route.path,
+    })),
+  });
+});
+
 tailscaleRouter.get("/devices", async (c) => {
   try {
     const devices = await tailscale.getDevices();
