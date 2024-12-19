@@ -2,9 +2,9 @@ import axios, { AxiosInstance } from "axios";
 import { TailscaleOptions } from "./types";
 import { TailscaleClientError } from "./error";
 import {
-  Device,
-  DeviceResponseSchema,
-  DeviceResponse,
+  T_Device,
+  TailscaleDevicesResponseSchema,
+  T_TailscaleDevicesResponseSchema,
 } from "./tailscale.schema";
 import { z } from "zod";
 
@@ -49,13 +49,13 @@ export class TailscaleClient {
     );
   }
 
-  async getDevices(): Promise<DeviceResponse[]> {
+  async getDevices(): Promise<T_TailscaleDevicesResponseSchema> {
     return await withErrorHandling(async () => {
       const response = await this.client.get(
         `/tailnet/${this.options.tailnet}/devices`,
       );
 
-      const devices = response.data.devices as Device[];
+      const devices = response.data.devices as T_Device[];
       const now = Date.now();
       const timeout = this.options.onlineTimeout ?? 60 * 1000; // 60 seconds
 
@@ -65,7 +65,10 @@ export class TailscaleClient {
         return { ...device, online };
       });
 
-      return DeviceResponseSchema.array().parse(devicesWithOnlineStatus);
+      return TailscaleDevicesResponseSchema.parse({
+        devices: devicesWithOnlineStatus,
+        count: devicesWithOnlineStatus.length,
+      });
     }, "Failed to fetch devices");
   }
 }

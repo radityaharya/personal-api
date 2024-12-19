@@ -149,6 +149,10 @@ const DeviceResponseSchema = DeviceSchema.omit({
   nodeId: true,
   id: true,
   machineKey: true,
+  blocksIncomingConnections: true,
+  keyExpiryDisabled: true,
+  authorized: true,
+  isExternal: true,
 }).extend({
   online: z
     .boolean()
@@ -160,18 +164,19 @@ const DeviceResponseSchema = DeviceSchema.omit({
 
 const TailscaleDevicesResponseSchema = z.object({
   devices: z.array(DeviceResponseSchema),
+  count: z.number(),
 });
 
 // ######
 
-type ClientSupports = z.infer<typeof ClientSupportsSchema>;
-type DerpLatency = z.infer<typeof DerpLatencySchema>;
-type ClientConnectivity = z.infer<typeof ClientConnectivitySchema>;
-type PostureIdentity = z.infer<typeof PostureIdentitySchema>;
-type Device = z.infer<typeof DeviceSchema>;
-type TailscaleDevicesResponseSchema = z.infer<typeof TailscaleDevicesResponseSchema>;
+type T_ClientSupports = z.infer<typeof ClientSupportsSchema>;
+type T_DerpLatency = z.infer<typeof DerpLatencySchema>;
+type T_ClientConnectivity = z.infer<typeof ClientConnectivitySchema>;
+type T_PostureIdentity = z.infer<typeof PostureIdentitySchema>;
+type T_Device = z.infer<typeof DeviceSchema>;
+type T_TailscaleDevicesResponseSchema = z.infer<typeof TailscaleDevicesResponseSchema>;
 
-type DeviceResponse = z.infer<typeof DeviceResponseSchema>;
+type T_DeviceResponse = z.infer<typeof DeviceResponseSchema>;
 
 export {
   ClientSupportsSchema,
@@ -185,12 +190,13 @@ export {
   DeviceResponseSchema,
   
   // Types
-  ClientSupports,
-  DerpLatency,
-  ClientConnectivity,
-  PostureIdentity,
-  Device,
-
+  T_ClientSupports,
+  T_DerpLatency,
+  T_ClientConnectivity,
+  T_PostureIdentity,
+  T_Device,
+  
   // Response Types
-  DeviceResponse,
+  T_TailscaleDevicesResponseSchema,
+  T_DeviceResponse,
 };
