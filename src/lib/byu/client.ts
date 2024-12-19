@@ -48,7 +48,6 @@ export class ByuClient {
   async getPlan(): Promise<T_ByuPlanResponse> {
     return withErrorHandling(async () => {
       const response = await this.client.get("/planRemaining");
-      console.log(JSON.stringify(response.data, null, 2));
       return ByuPlanResponseSchema.parse(response.data);
     }, "Failed to fetch plan data");
   }
