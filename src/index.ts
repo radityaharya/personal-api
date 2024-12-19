@@ -3,7 +3,6 @@ import { Hono } from "hono";
 import { customLogger } from "./utils/logger";
 import { zzzRouter } from "./routes/zzz";
 import { byuRouter } from "./routes/byu";
-import { aiRouter } from "./routes/ai";
 import { tailscaleRouter } from "./routes/tailscale";
 // import { cache } from "./utils/cache";
 
@@ -33,7 +32,6 @@ app.get("/", (c) => {
 
 app.route("/api/zzz", zzzRouter);
 app.route("/api/byu", byuRouter);
-app.route("/api/ai", aiRouter);
 app.route("/api/tailscale", tailscaleRouter);
 
 export default {
