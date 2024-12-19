@@ -1,4 +1,4 @@
-import { IRecordNoteResponse } from "../../schemas/zzz.schema";
+import { IRecordNoteResponse } from "./zzz.schema";
 export enum ZZZRegion {
   ASIA = "prod_gf_jp",
 }

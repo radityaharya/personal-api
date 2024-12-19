@@ -80,6 +80,6 @@ byuRouter.get("/plan", async (c) => {
     const summary = transformPlanData(data);
     return c.json(createResponse(summary));
   } catch (error) {
-    return handleError(c, error, "BYU_API_ERROR");
+    return handleError(c, error as Error, "BYU_API_ERROR");
   }
 });

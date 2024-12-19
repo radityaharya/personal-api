@@ -1,7 +1,13 @@
 import { Hono } from "hono";
 import { handleError } from "../utils/error";
 import { createResponse } from "../utils/createResponse";
-import { ZZZLanguageEnum, ZZZClient, ZZZOptions, ZZZRegion } from "@lib/zzz";
+import {
+  ZZZLanguageEnum,
+  ZZZClient,
+  ZZZOptions,
+  ZZZRegion,
+  ZZZClientError,
+} from "@lib/zzz";
 
 export const zzzRouter = new Hono();
 
@@ -19,6 +25,6 @@ zzzRouter.get("/note", async (c) => {
     const recordNote = await zzz.getNote();
     return c.json(createResponse(recordNote));
   } catch (error) {
-    return handleError(c, error, "FETCH_RECORD_NOTE_ERROR");
+    return handleError(c, error as ZZZClientError, "FETCH_RECORD_NOTE_ERROR");
   }
 });

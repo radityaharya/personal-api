@@ -2,9 +2,9 @@ import { Hono } from "hono";
 // import { bearerAuth } from 'hono/bearer-auth'
 import { customLogger } from "./utils/logger";
 import { zzzRouter } from "./routes/zzz";
-import { networkRouter } from "./routes/network";
 import { byuRouter } from "./routes/byu";
 import { aiRouter } from "./routes/ai";
+import { tailscaleRouter } from "./routes/tailscale";
 // import { cache } from "./utils/cache";
 
 const app = new Hono<{
@@ -32,9 +32,10 @@ app.get("/", (c) => {
 });
 
 app.route("/api/zzz", zzzRouter);
-app.route("/api/network", networkRouter);
 app.route("/api/byu", byuRouter);
 app.route("/api/ai", aiRouter);
+app.route("/api/tailscale", tailscaleRouter);
+
 export default {
   fetch: app.fetch,
   port: 3000,
