@@ -1,13 +1,1 @@
-To install dependencies:
-
-```sh
-bun install
-```
-
-To run:
-
-```sh
-bun run dev
-```
-
-open http://localhost:3000
+Random api clients from various services for my personal use.
