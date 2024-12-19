@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import { handleError } from "../utils/error";
-import { createResponse } from "../utils/createResponse";
+import { handleError } from "@utils/error";
+import { createResponse } from "@utils/createResponse";
 import {
   ZZZLanguageEnum,
   ZZZClient,
