@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { ByuApiResponseSchema, T_ByuApiResponse } from "./byu.schema";
+import { ByuPlanResponseSchema, T_ByuPlanResponse } from "./byu.schema";
 import { ByuOptions } from "./types";
 import { ByuClientError } from "./error";
 import { z } from "zod";
@@ -45,10 +45,11 @@ export class ByuClient {
     );
   }
 
-  async getPlan(): Promise<T_ByuApiResponse> {
+  async getPlan(): Promise<T_ByuPlanResponse> {
     return withErrorHandling(async () => {
       const response = await this.client.get("/planRemaining");
-      return ByuApiResponseSchema.parse(response.data);
+      console.log(JSON.stringify(response.data, null, 2));
+      return ByuPlanResponseSchema.parse(response.data);
     }, "Failed to fetch plan data");
   }
 }

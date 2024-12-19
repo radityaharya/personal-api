@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 // import { bearerAuth } from 'hono/bearer-auth'
-import { customLogger } from "./utils/logger";
+import { customLogger } from "@utils/logger";
 import { zzzRouter } from "./routes/zzz";
 import { byuRouter } from "./routes/byu";
 import { tailscaleRouter } from "./routes/tailscale";
