@@ -85,6 +85,7 @@ const VhsSaleSchema = z.object({
 const BountyCommissionSchema = z.object({
   num: z.number(),
   total: z.number(),
+  refresh_time: z.number(),
 });
 
 const SurveyPointsSchema = z.object({
@@ -105,10 +106,10 @@ const RecordNoteResponseSchema = z.object({
   vhs_sale: VhsSaleSchema,
   card_sign: z.enum(["CardSignDone", "CardSignNo"]),
   bounty_commission: BountyCommissionSchema,
-  survey_points: SurveyPointsSchema,
+  survey_points: z.nullable(SurveyPointsSchema),
   abyss_refresh: z.number(),
   coffee: z.nullable(z.object({}).passthrough()),
-  weekly_task: z.nullable(WeeklyTaskSchema).optional(),
+  weekly_task: WeeklyTaskSchema,
 });
 
 type IRecordNoteResponse = z.infer<typeof RecordNoteResponseSchema>;
