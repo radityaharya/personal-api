@@ -1,4 +1,4 @@
-import { T_ByuApiResponse } from "./byu.schema";
+import { T_ByuPlanResponse } from "./byu.schema";
 
 export interface ByuOptions {
   apiKey: string;
@@ -12,5 +12,5 @@ export interface APIResponse<T> {
 
 export interface APIErrorResponse {
   message?: string;
-  data?: T_ByuApiResponse;
+  data?: T_ByuPlanResponse;
 }

@@ -1,0 +1,15 @@
+meta {
+  name: plan
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/byu/plan
+  body: none
+  auth: none
+}
+
+assert {
+  res.body.status: eq success
+}

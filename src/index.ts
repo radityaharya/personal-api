@@ -1,33 +1,37 @@
 import { Hono } from "hono";
-// import { bearerAuth } from 'hono/bearer-auth'
-import { customLogger } from "@utils/logger";
+import { customLogger } from "./utils/logger";
 import { zzzRouter } from "./routes/zzz";
 import { byuRouter } from "./routes/byu";
 import { tailscaleRouter } from "./routes/tailscale";
 // import { cache } from "./utils/cache";
+import { env } from "hono/adapter";
 
-const app = new Hono<{
-  Variables: {
-    cached?: boolean;
-  };
-}>();
+const app = new Hono();
 
 app.use("/*", customLogger);
 
-// const DEFAULT_CACHE_DURATION = 60;
+app.use("*", async (c, next) => {
+  const { API_TOKEN } = env<{ API_TOKEN: string }>(c);
 
-// const cacheDuration: number = process.env.CACHE_DURATION
-//   ? parseInt(process.env.CACHE_DURATION)
-//   : DEFAULT_CACHE_DURATION;
-
-// app.use("/*", cache(cacheDuration));
-
-app.get("/", (c) => {
-  return c.json({
-    status: "ok",
-    version: process.env.npm_package_version,
-    uptime: process.uptime(),
-  });
+  if (c.req.header("authorization")) {
+    const authHeader = c.req.header("authorization");
+    if (authHeader) {
+      const [type, token] = authHeader.split(" ");
+      if (type === "Bearer" && token === API_TOKEN) {
+        await next();
+        return;
+      }
+    }
+  }
+  return c.json(
+    {
+      status: "error",
+      message: "Unauthorized",
+      timestamp: new Date(),
+      statusCode: 401,
+    },
+    401,
+  );
 });
 
 app.route("/api/zzz", zzzRouter);

@@ -31,8 +31,9 @@ export const customLogger = async (c: Context, next: Next) => {
   const start = performance.now();
   await next();
   const timeMs = Math.round(performance.now() - start);
+  const statusCode = c.res.status;
 
   console.log(
-    `${color}[${timestamp}] ${arrows[1]} ${method} ${path} ${timeMs}ms${reset}`,
+    `${color}[${timestamp}] ${arrows[1]} ${method} ${path} ${statusCode} ${timeMs}ms${reset}`,
   );
 };

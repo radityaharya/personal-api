@@ -1,0 +1,15 @@
+meta {
+  name: devices
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/tailscale/devices
+  body: none
+  auth: none
+}
+
+assert {
+  res.body.status: eq success
+}
