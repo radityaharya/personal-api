@@ -4,9 +4,9 @@ import { zzzRouter } from "./routes/zzz";
 import { byuRouter } from "./routes/byu";
 import { tailscaleRouter } from "./routes/tailscale";
 import { env } from "hono/adapter";
-import { postAllDataToKustom } from "./crons";
+// import { postAllDataToKustom } from "./crons";
 
-import * as cron from "node-cron";
+// import * as cron from "node-cron";
 import { serve } from "bun";
 
 const app = new Hono();
@@ -41,10 +41,10 @@ app.route("/api/zzz", zzzRouter);
 app.route("/api/byu", byuRouter);
 app.route("/api/tailscale", tailscaleRouter);
 
-cron.schedule("*/5 * * * *", postAllDataToKustom, {
-  runOnInit: true,
-  timezone: "Asia/Jakarta",
-});
+// cron.schedule("*/5 * * * *", postAllDataToKustom, {
+//   runOnInit: true,
+//   timezone: "Asia/Jakarta",
+// });
 
 console.log("Server is running on port 3000");
 serve({
