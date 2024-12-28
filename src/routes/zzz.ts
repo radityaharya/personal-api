@@ -8,17 +8,20 @@ import {
   ZZZRegion,
   ZZZClientError,
 } from "@lib/zzz";
+import { env } from "@utils/env";
 
 export const zzzRouter = new Hono();
 
-const options: ZZZOptions = {
-  cookie: process.env.COOKIE_STR as string,
-  uid: process.env.ZZZ_UID as unknown as number,
-  region: ZZZRegion.ASIA,
-  lang: ZZZLanguageEnum.ENGLISH,
-};
+const zzzClient = () => {
+  const options: ZZZOptions = {
+    cookie: env().env.ZZZ_COOKIE_STRING,
+    uid: env().env.ZZZ_UID,
+    region: ZZZRegion.ASIA,
+    lang: ZZZLanguageEnum.ENGLISH,
+  };
 
-const zzz = new ZZZClient(options);
+  return new ZZZClient(options);
+};
 
 zzzRouter.get("/", (c) => {
   return c.json({
@@ -31,6 +34,7 @@ zzzRouter.get("/", (c) => {
 
 zzzRouter.get("/note", async (c) => {
   try {
+    const zzz = zzzClient();
     const recordNote = await zzz.getNote();
     return c.json(createResponse(recordNote));
   } catch (error) {

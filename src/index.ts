@@ -4,20 +4,32 @@ import { zzzRouter } from "./routes/zzz";
 import { byuRouter } from "./routes/byu";
 import { tailscaleRouter } from "./routes/tailscale";
 import { env } from "hono/adapter";
+import { contextStorage } from "hono/context-storage";
+import { Env } from "@utils/env";
 // import { postAllDataToKustom } from "./crons";
 
-// import * as cron from "node-cron";
-import { serve } from "bun";
-
-const app = new Hono();
+export const app = new Hono<{ Bindings: Env }>();
 
 app.use("/*", customLogger);
 
 app.use("*", async (c, next) => {
-  const { API_TOKEN } = env<{ API_TOKEN: string }>(c);
+  c.env = env(c);
+  await next();
+});
+
+app.use(contextStorage());
+
+app.use("*", async (c, next) => {
+  const { API_TOKEN } = env(c);
+
+  if (!API_TOKEN) {
+    await next();
+    return;
+  }
 
   if (c.req.header("authorization")) {
     const authHeader = c.req.header("authorization");
+
     if (authHeader) {
       const [type, token] = authHeader.split(" ");
       if (type === "Bearer" && token === API_TOKEN) {
@@ -41,14 +53,12 @@ app.route("/api/zzz", zzzRouter);
 app.route("/api/byu", byuRouter);
 app.route("/api/tailscale", tailscaleRouter);
 
-// cron.schedule("*/5 * * * *", postAllDataToKustom, {
-//   runOnInit: true,
-//   timezone: "Asia/Jakarta",
-// });
-
-console.log("Server is running on port 3000");
-serve({
-  fetch: app.fetch,
-  port: 3000,
-  hostname: "0.0.0.0",
+app.get("/health", async (c) => {
+  return c.json({
+    status: "success",
+    message: "Server is running",
+    timestamp: new Date(),
+  });
 });
+
+export default app;

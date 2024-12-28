@@ -3,9 +3,15 @@
     "strict": true,
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
     "paths": {
       "@lib/*": ["./src/lib/*"],
       "@utils/*": ["./src/utils/*"]
-    }
+    },
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["esnext"],
+    "types": ["@cloudflare/workers-types"]
   }
 }

@@ -7,15 +7,18 @@ import {
   TailscaleOptions,
 } from "@lib/tailscale";
 import { DeviceFilters, filterDevices } from "@lib/tailscale/utils";
+import { env } from "@utils/env";
 
 export const tailscaleRouter = new Hono();
 
-const options: TailscaleOptions = {
-  apiKey: process.env.TAILSCALE_API_KEY as string,
-  tailnet: process.env.TAILSCALE_TAILNET as string,
-};
+const tailscale = () => {
+  const options: TailscaleOptions = {
+    apiKey: env().env.TAILSCALE_API_KEY,
+    tailnet: env().env.TAILSCALE_TAILNET,
+  };
 
-const tailscale = new TailscaleClient(options);
+  return new TailscaleClient(options);
+};
 
 tailscaleRouter.get("/", (c) => {
   return c.json({
@@ -28,7 +31,7 @@ tailscaleRouter.get("/", (c) => {
 
 tailscaleRouter.get("/devices", async (c) => {
   try {
-    const response = await tailscale.getDevices();
+    const response = await tailscale().getDevices();
 
     const filters: DeviceFilters = {
       online: c.req.query("online")

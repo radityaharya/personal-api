@@ -30,7 +30,6 @@ export async function postAllDataToKustom() {
         ...prefixDataKeys(byuData, "byu"),
       },
     };
-    console.log(JSON.stringify(data, null, 2));
 
     await kustom.postMessage(data);
   } catch (error) {
