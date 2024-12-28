@@ -21,7 +21,7 @@ export default [
     },
     rules: {
       "prettier/prettier": "warn",
-      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/triple-slash-reference": [
         "error",
         {

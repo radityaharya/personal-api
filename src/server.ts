@@ -1,18 +1,6 @@
 import { serve } from "bun";
 import app from ".";
 
-function listEnvs() {
-  const envs = Object.entries(process.env || {}).map(([key, value]) => ({
-    key: key.replace("env.", ""),
-    value,
-  }));
-
-  console.log("- Env:");
-  envs.forEach(({ key }) => {
-    console.log(`  - ${key}: "(hidden)"`);
-  });
-}
-
 async function healthCheck() {
   try {
     const response = await fetch("http://localhost:3000/health");
@@ -27,7 +15,6 @@ if (process.argv.includes("--health-check")) {
   process.exit(isHealthy ? 0 : 1);
 }
 
-listEnvs();
 console.log("Server is running on port 3000");
 serve({
   fetch: app.fetch,

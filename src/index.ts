@@ -5,17 +5,14 @@ import { byuRouter } from "./routes/byu";
 import { tailscaleRouter } from "./routes/tailscale";
 import { env } from "hono/adapter";
 import { contextStorage } from "hono/context-storage";
-import { Env } from "@utils/env";
+import { Env, validateEnv } from "@utils/env";
 // import { postAllDataToKustom } from "./crons";
 
 export const app = new Hono<{ Bindings: Env }>();
 
 app.use("/*", customLogger);
 
-app.use("*", async (c, next) => {
-  c.env = env(c);
-  await next();
-});
+app.use("*", validateEnv());
 
 app.use(contextStorage());
 
